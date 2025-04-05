@@ -12,8 +12,8 @@
 # include <fcntl.h>
 # include <math.h>
 
-# define WIDTH 600
-# define HEIGHT 800
+# define WIDTH 400
+# define HEIGHT 400
 
 
 # define ESCAPE 65307
@@ -23,7 +23,7 @@ typedef struct s_fractol_values
 {
 	int		fractal_type; // 0 = mandelbrot, 1 = julia
 	double	c_real;       // usado para Julia
-	double	c_imag;
+	double	c_imag;	// usado para Julia
 	double	a_min;
 	double	a_max;
 	double	b_min;

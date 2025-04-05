@@ -15,7 +15,7 @@ void	init_values(t_fractol_values *values)
     values->a_max = 2.0;
     values->b_min = -2.0;
     values->b_max = 2.0;
-	values->max_iter = 256;
+	values->max_iter = 100;
 	values->fractal_type = 0;
 	values->c_real = -0.7;
 	values->c_imag = 0.27015;

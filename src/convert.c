@@ -89,6 +89,7 @@ void render_fractal(t_mlx *mlx)
 	int	n;
 	int	color;
 
+	mlx_clear_window(mlx->mlx_ptr,mlx->win_ptr);
 	x = 0;
 	while (x < HEIGHT)  // Itera por todos os pixels da tela
 	{
@@ -97,18 +98,15 @@ void render_fractal(t_mlx *mlx)
 		{
             // Mapeia o ponto (x, y) da tela para o plano complexo
 			map_screen_to_complex(x, y, mlx->values);
-
             // Calcula o número de iterações do ponto (a, b)
             if (mlx->values->fractal_type == 0)
                 n = mandelbrot(mlx);
             else
                 n = julia(mlx);
-
             // Atribui uma cor de acordo com o número de iterações
 			color = color_by_iterations(n,mlx->values->max_iter,
                 mlx->values->color_offset,
                 mlx->values->palette);
-
             // Desenha o ponto na tela usando a MiniLibX
 			my_mlx_pixel_put(mlx, x, y, color);
 			y++;
