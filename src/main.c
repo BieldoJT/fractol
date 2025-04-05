@@ -33,6 +33,7 @@ int main(int argc, char **argv)
 
 
 	mlx_key_hook(mlx->win_ptr, my_key_func, mlx);
+	//mlx_hook(mlx->win_ptr,2, 1L<<0, my_key_func, mlx); //permite repetição do botão
 	mlx_hook(mlx->win_ptr, 17, 0, destroy, mlx);
 	mlx_loop_hook(mlx->mlx_ptr, update_animation, mlx);
 	mlx_loop(mlx->mlx_ptr);
