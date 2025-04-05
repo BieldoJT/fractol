@@ -9,11 +9,35 @@ void map_screen_to_complex(int x, int y, t_fractol_values *values)
 }
 
 
-int	color_by_iterations(int n, int max_iter)
+int	color_by_iterations(int n, int max_iter, int offset, int palette)
 {
+	double	t;
+	int		r;
+	int		g;
+	int		b;
+
 	if (n >= max_iter)
-		return (0x000000); // dentro do conjunto → preto
-	return (0x003366 * (n % 10)); // azul escuro com variação
+		return (0x000000);
+	t = (double)(n + offset) / (double)max_iter;
+	if (palette == 0)
+	{
+		r = (int)(sin(5.0 * t + 0) * 127 + 128);
+		g = (int)(sin(5.0 * t + 2) * 127 + 128);
+		b = (int)(sin(5.0 * t + 4) * 127 + 128);
+	}
+	else if (palette == 1)
+	{
+		r = 255 - (int)(255 * t);
+		g = (int)(64 * t);
+		b = (int)(255 * t);
+	}
+	else
+	{
+		r = (n * 5 + offset) % 256;
+		g = (n * 3 + offset) % 256;
+		b = (n * 7 + offset) % 256;
+	}
+	return ((r << 16) | (g << 8) | b);
 }
 
 int mandelbrot(t_mlx *mlx)
@@ -35,6 +59,28 @@ int mandelbrot(t_mlx *mlx)
     return n;  // Retorna o número de iterações até a "fuga"
 }
 
+int	julia(t_mlx *mlx)
+{
+	int		n;
+	double	zr;
+	double	zi;
+	double	tmp;
+	int		max_iter;
+
+	zr = mlx->values->real;
+	zi = mlx->values->imag;
+	max_iter = mlx->values->max_iter;
+	n = 0;
+	while ((zr * zr + zi * zi <= 4) && (n < max_iter))
+	{
+		tmp = zr * zr - zi * zi + mlx->values->c_real;
+		zi = 2 * zr * zi + mlx->values->c_imag;
+		zr = tmp;
+		n++;
+	}
+	return (n);
+}
+
 
 void render_fractal(t_mlx *mlx)
 {
@@ -53,10 +99,15 @@ void render_fractal(t_mlx *mlx)
 			map_screen_to_complex(x, y, mlx->values);
 
             // Calcula o número de iterações do ponto (a, b)
-			n = mandelbrot(mlx);
+            if (mlx->values->fractal_type == 0)
+                n = mandelbrot(mlx);
+            else
+                n = julia(mlx);
 
             // Atribui uma cor de acordo com o número de iterações
-			color = color_by_iterations(n, mlx->values->max_iter);
+			color = color_by_iterations(n,mlx->values->max_iter,
+                mlx->values->color_offset,
+                mlx->values->palette);
 
             // Desenha o ponto na tela usando a MiniLibX
 			my_mlx_pixel_put(mlx, x, y, color);

@@ -15,8 +15,11 @@ void	init_values(t_fractol_values *values)
     values->a_max = 2.0;
     values->b_min = -2.0;
     values->b_max = 2.0;
-	values->max_iter = 300;
+	values->max_iter = 256;
+	values->fractal_type = 0;
+	values->c_real = -0.7;
+	values->c_imag = 0.27015;
+	values->color_offset = 0;
+	values->palette = 0;
 
-    // Define a "velocidade" de movimento (como se move um pouco por vez)
-    values->move_step = 0.1;
 }

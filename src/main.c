@@ -8,9 +8,14 @@ void	my_mlx_pixel_put(t_mlx *mlx, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-int main()
+int main(int argc, char **argv)
 {
-	ft_printf("hello world\n");
+	if (argc != 2 || (ft_strncmp(argv[1], "mandelbrot", 10) != 0
+		&& ft_strncmp(argv[1], "julia", 5) != 0))
+	{
+		ft_printf("Usage: ./fractol mandelbrot | julia\n");
+		return (1);
+	}
 
 	t_mlx	*mlx;
 
@@ -19,6 +24,8 @@ int main()
 
 	init_mlx(mlx);
 	init_values(mlx->values);
+	if (ft_strncmp(argv[1], "julia", 5) == 0)
+		mlx->values->fractal_type = 1;
 
 
 	//my_mlx_pixel_put(mlx, 400,300, 0xFF0000);
@@ -26,8 +33,8 @@ int main()
 
 
 	mlx_key_hook(mlx->win_ptr, my_key_func, mlx);
-	mlx_mouse_hook(mlx->win_ptr, mouse_zoom, mlx);
 	mlx_hook(mlx->win_ptr, 17, 0, destroy, mlx);
+	mlx_loop_hook(mlx->mlx_ptr, update_animation, mlx);
 	mlx_loop(mlx->mlx_ptr);
 	return 0;
 
